@@ -1,0 +1,118 @@
+@startuml erd
+
+entity users {
+    * id : bigint
+    --
+    * name : varchar
+    * username : varchar <U>
+    * email : varchar <U>
+    * password : varchar
+    * role : varchar (admin, panitia, peserta)
+    --
+    * created_at : timestamp
+    * updated_at : timestamp
+    deleted_at : timestamp
+}
+
+entity competitions {
+    * id : bigint
+    --
+    * name : varchar
+    * description : text
+    * start_date : date
+    * end_date : date
+
+    --
+    * created_at : timestamp
+    * updated_at : timestamp
+    deleted_at : timestamp
+}
+
+entity sub_competitions {
+    * id : bigint
+    * competition_id : bigint
+    --
+    * name : varchar
+    * description : text
+    * registration_fee : decimal
+    --
+    * created_at : timestamp
+    * updated_at : timestamp
+    deleted_at : timestamp
+}
+
+entity guidebooks {
+    * id : bigint
+    * competition_id : bigint
+    --
+    * title : varchar
+    * file_path : varchar
+    --
+    * created_at : timestamp
+    * updated_at : timestamp
+    deleted_at : timestamp
+}
+
+entity teams {
+    * id : bigint
+    * user_id : bigint
+    --
+    * team_name : varchar
+    * institution : varchar
+    * created_at : timestamp
+    --
+    * created_at : timestamp
+    * updated_at : timestamp
+    deleted_at : timestamp
+}
+
+entity team_members {
+    * id : bigint
+    --
+    team_id : bigint
+    member_name : varchar
+    member_email : varchar
+    member_role : varchar
+    --
+    * created_at : timestamp
+    * updated_at : timestamp
+    deleted_at : timestamp
+}
+
+entity registrations {
+    * id : bigint
+    * team_id : bigint
+    * sub_competition_id : bigint
+    --
+    * registration_status : enum
+    * registered_at : timestamp
+    --
+    * created_at : timestamp
+    * updated_at : timestamp
+    deleted_at : timestamp
+}
+
+entity payments {
+    * id : bigint
+    * registration_id : bigint
+    --
+    * payment_method : varchar
+    * payment_status : varchar
+    * transaction_id : varchar
+    paid_at : timestamp
+    --
+    * created_at : timestamp
+    * updated_at : timestamp
+    deleted_at : timestamp
+}
+
+users ||--o{ teams
+teams ||--o{ team_members
+teams ||--o{ registrations
+sub_competitions ||--o{ registrations
+registrations ||--|| payments
+
+competitions ||--o{ sub_competitions
+competitions ||--o{ guidebooks
+
+@enduml

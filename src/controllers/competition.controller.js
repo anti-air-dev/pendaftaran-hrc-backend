@@ -1,41 +1,32 @@
-const Competition = require('../models/competition.model');
-// let competitions = require('../data/competition.data');
+const CompetitionService = require('../services/competition.service');
 
-let competitions = [
-  new Competition(1, 'Lomba Coding', 'Dicoding', '2026-05-01', 'Online'),
-  new Competition(2, 'Hackathon Nasional', 'Kominfo', '2026-06-15', 'Jakarta')
-];
-
-// GET /competitions
-exports.getAllCompetitions = (req, res) => {
-  res.json({
-    message: 'Success',
-    data: competitions
-  });
-};
-
-// POST /competitions
-exports.createCompetition = (req, res) => {
-  const { name, organizer, date, location } = req.body;
-
-  if (!name || !organizer || !date || !location) {
-    return res.status(400).json({
-      message: 'All fields are required'
-    });
+class CompetitionController {
+  async index(req, res) {
+    try {
+      const data = await CompetitionService.getAllCompetitions();
+      res.status(200).json({ status: 'success', data });
+    } catch (error) {
+      res.status(500).json({ status: 'error', message: error.message });
+    }
   }
 
-  const newCompetition = new Competition(
-    competitions.length + 1,
-    name,
-    organizer,
-    date,
-    location
-  );
+  async store(req, res) {
+    try {
+      const data = await CompetitionService.createCompetition(req.body);
+      res.status(201).json({ status: 'success', data });
+    } catch (error) {
+      res.status(400).json({ status: 'error', message: error.message });
+    }
+  }
 
-  competitions.push(newCompetition);
+  async show(req, res) {
+    try {
+      const data = await CompetitionService.getCompetitionDetail(req.params.id);
+      res.status(200).json({ status: 'success', data });
+    } catch (error) {
+      res.status(404).json({ status: 'error', message: error.message });
+    }
+  }
+}
 
-  res.status(201).json({
-    message: 'Competition created',
-    data: newCompetition
-  });
-};
+module.exports = new CompetitionController();

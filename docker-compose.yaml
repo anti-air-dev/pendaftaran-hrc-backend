@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: db_lomba
+      MYSQL_ROOT_PASSWORD: password_aman
+    ports:
+      - "3307:3307"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # api-server:
+  #   build: .
+  #   ports:
+  #     - "5000:5000"
+  #   environment:
+  #     DB_HOST: mysql-db
+  #     DB_USER: root
+  #     DB_PASS: password_aman
+  #     DB_NAME: db_lomba
+  #   volumes:
+  #     - ./public/uploads:/usr/src/app/public/uploads # Agar file tidak hilang
+  #   depends_on:
+  #     - mysql-db
+
+  api-server:
+    build: 
+      context: .
+      target: development
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/usr/src/app           
+      - /usr/src/app/node_modules # Mencegah node_modules lokal menimpa container
+    environment:
+      - PORT=5000
+      - DB_HOST=mysql-db
+      - DB_USER=root
+      - DB_PASS=password_aman
+      - DB_NAME=db_lomba
+    depends_on:
+      - mysql-db
+
+volumes:
+  mysql_data:

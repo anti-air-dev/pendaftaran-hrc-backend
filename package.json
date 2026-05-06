@@ -8,13 +8,20 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon server.js"
+    "dev": "nodemon ./src/server.js"
   },
   "dependencies": {
+    "dotenv": "^17.4.2",
+    "dottie": "^2.0.7",
     "express": "^5.2.1",
-    "express-validator": "^7.3.2"
+    "express-validator": "^7.3.2",
+    "glob": "^11.1.0",
+    "mysql2": "^3.22.3",
+    "sequelize": "^6.37.8",
+    "uuid": "^14.0.0"
   },
   "devDependencies": {
-    "nodemon": "^3.1.14"
+    "nodemon": "^3.1.14",
+    "sequelize-cli": "^6.6.5"
   }
 }

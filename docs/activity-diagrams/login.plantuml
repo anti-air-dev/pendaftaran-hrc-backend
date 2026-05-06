@@ -1,0 +1,28 @@
+@startuml login
+
+start
+
+:Pengguna membuka halaman login;
+
+:Sistem menampilkan form login;
+
+:Pengguna memasukkan email dan password;
+
+:Pengguna menekan tombol login;
+
+if (Data login valid?) then (Ya)
+
+  :Sistem membuat sesi login;
+  :Sistem menentukan role pengguna;
+  :Sistem mengarahkan pengguna ke dashboard;
+
+else (Tidak)
+
+  :Sistem menampilkan pesan error;
+  :Pengguna diminta memasukkan data login kembali;
+
+endif
+
+stop
+
+@enduml

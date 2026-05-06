@@ -1,0 +1,109 @@
+<mxfile host="65bd71144e">
+    <diagram id="0MX-Atvm87QgOfTdcPrB" name="Page-1">
+        <mxGraphModel dx="429" dy="1252" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="13" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="2" target="7">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="2" target="6">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="2" target="8">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="2" target="9">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="2" target="10">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="19" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="2" target="11">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="2" value="Pengguna / Peserta" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="330" y="470" width="30" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="Sistem Pendaftaran" style="swimlane;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+                    <mxGeometry x="420" y="350" width="350" height="465" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Register" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="50" y="144" width="120" height="25" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="Login" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="50" y="94" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="Lihat Informasi Lomba" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="50" y="184" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="Daftar Tim" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="50" y="244" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="Pembayaran" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="50" y="294" width="120" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="Lihat Status Pendaftaran" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="50" y="344" width="120" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="20" value="Lihat Daftar Peserta" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="200" y="35" width="120" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="21" value="Verifikasi Pendaftaran" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="200" y="95" width="120" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="27" value="Kelola Lomba" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="210" y="225" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="28" value="Kelola Sub Lomba" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="210" y="285" width="120" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="29" value="Kelola Guidebook" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="210" y="340" width="120" height="35" as="geometry"/>
+                </mxCell>
+                <mxCell id="30" value="Kelola Panitia" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="210" y="395" width="120" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="22" value="Dashboard Monitoring" style="ellipse;whiteSpace=wrap;html=1;" vertex="1" parent="5">
+                    <mxGeometry x="200" y="155" width="120" height="45" as="geometry"/>
+                </mxCell>
+                <mxCell id="23" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="3" target="20">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="25" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="3" target="21">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="26" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="3" target="22">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="38" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="3" target="7">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="Panitia" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="890" y="375" width="30" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="31" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="4" target="27">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="32" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="4" target="28">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="33" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="4" target="29">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="34" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="4" target="30">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="37" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;endArrow=block;endFill=0;" edge="1" parent="1" source="4" target="3">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="39" style="edgeStyle=none;html=1;exitX=0.5;exitY=0.5;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="4" target="7">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="Admin" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
+                    <mxGeometry x="890" y="560" width="30" height="60" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
