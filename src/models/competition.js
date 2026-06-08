@@ -4,27 +4,44 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Competition extends Model {
     static associate(models) {
-      // Definisikan relasi di sini jika ada
+      // Relasi One-to-Many: Satu kompetisi memiliki banyak sub-kompetisi
+      Competition.hasMany(models.SubCompetition, {
+        foreignKey: 'competition_id',
+        as: 'subCompetitions'
+      });
     }
   }
+
   Competition.init({
-    id: {
-      type: DataTypes.BIGINT,
-      primaryKey: true,
-      autoIncrement: true
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false
     },
-    name: DataTypes.STRING,
+    slug: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
+    },
     description: DataTypes.TEXT,
-    start_date: DataTypes.DATEONLY,
-    end_date: DataTypes.DATEONLY
+    start_date: {
+      type: DataTypes.DATEONLY,
+      field: 'start_date' // Pemetaan dari DB snake_case ke JS camelCase
+    },
+    end_date: {
+      type: DataTypes.DATEONLY,
+      field: 'end_date'
+    },
+    status: {
+      type: DataTypes.ENUM('draft', 'published', 'archived'),
+      defaultValue: 'draft'
+    }
   }, {
     sequelize,
     modelName: 'Competition',
-    tableName: 'Competitions', // Nama tabel di database
-    underscored: true,        // Menggunakan snake_case (created_at) di DB
-    paranoid: true,           // Aktifkan Soft Delete (deleted_at)
-    timestamps: true          // Mengelola created_at & updated_at secara otomatis
+    tableName: 'competitions',
+    underscored: true, // Otomatis menggunakan snake_case untuk created_at, updated_at
+    paranoid: true,    // Mengaktifkan fitur Soft Deletes (deleted_at)
+    deletedAt: 'deleted_at'
   });
-  
   return Competition;
 };

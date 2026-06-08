@@ -1,26 +1,33 @@
 const express = require('express');
 const router = express.Router();
 
+const competitionController = require('../controllers/competition.controller');
+
+// Import middleware keamanan Anda
 const authMiddleware = require('../middlewares/auth.middleware');
+const { isAdmin, authorizeRoles } = require('../middlewares/role.middleware');
+const { validateCreateCompetition, validateUpdateCompetition } = require('../validators/competition.validator');
 
-const { createCompetitionValidator } = require('../validators/competition.validator');
-const validateResult = require('../middlewares/validationResult.middleware');
-const CompetitionController = require('../controllers/competition.controller');
+// ==========================================
+// PUBLIC ROUTES (Siapa saja bisa mengakses, termasuk pengunjung yang belum login)
+// ==========================================
+router.get('/', competitionController.getAll);
+router.get('/:id', competitionController.getById);
 
-// GET (public)
-// router.get('/',authMiddleware, competitionController.getAllCompetitions);
+// ==========================================
+// PROTECTED ROUTES (Wajib Login & Memiliki Role Tertentu)
+// ==========================================
 
-// // POST (auth + validation)
-// router.post(
-//   '/',
-//   authMiddleware,
-//   createCompetitionValidator,
-//   validateResult,
-//   competitionController.createCompetition
-// );
+// Hanya ADMIN yang bisa membuat kompetisi baru
+router.post('/', authMiddleware, isAdmin, validateCreateCompetition, competitionController.create);
 
-router.get('/', CompetitionController.index);
-router.post('/', CompetitionController.store);
-router.get('/:id', CompetitionController.show);
+// ADMIN atau COMMITTEE bisa memperbarui data kompetisi
+router.put('/:id', authMiddleware, authorizeRoles('admin', 'committee'), validateUpdateCompetition, competitionController.update);
+
+// Hanya ADMIN yang bisa menghapus (soft delete) kompetisi
+router.delete('/:id', authMiddleware, isAdmin, competitionController.delete);
+
+// Hanya ADMIN yang bisa melakukan restore kompetisi
+router.post('/:id/restore', authMiddleware, isAdmin, competitionController.restore);
 
 module.exports = router;

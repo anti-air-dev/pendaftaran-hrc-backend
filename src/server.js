@@ -18,6 +18,7 @@ const startServer = async () => {
     // 2. Jalankan server Express
     app.listen(PORT, () => {
       console.log(`🚀 Server is running on http://localhost:${PORT}`);
+      console.log(`API Docs available on http://localhost:${PORT}/api-docs`);
       console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
     });
   } catch (error) {

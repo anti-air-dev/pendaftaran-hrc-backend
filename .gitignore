@@ -5,6 +5,14 @@ npm-shrinkwrap.json
 *.log
 *.gz
 
+# Environment Variables (Sangat Penting!)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+public/uploads/*
 # Yarn
 yarn-error.log
 yarn.lock

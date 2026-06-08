@@ -1,0 +1,99 @@
+/api/users/register:
+  post:
+    tags:
+      - Authentication
+    summary: Registrasi user baru
+    description: Endpoint untuk mendaftarkan user dengan validasi ketat sesuai aturan sistem.
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - full_name
+              - username
+              - email
+              - password
+              - password_confirmation
+            properties:
+              full_name:
+                type: string
+                minLength: 3
+                description: Nama lengkap user
+                example: "Budi Santoso"
+              username:
+                type: string
+                pattern: "^[a-zA-Z0-9]+$"
+                description: Username hanya boleh alfanumerik
+                example: "budis123"
+              email:
+                type: string
+                format: email
+                description: Email valid untuk verifikasi
+                example: "budi@example.com"
+              password:
+                type: string
+                minLength: 8
+                description: Minimal 8 karakter dan mengandung setidaknya satu angka
+                example: "Password123"
+              password_confirmation:
+                type: string
+                minLength: 8
+                description: Konfirmasi password tidak sama, silahkan coba lagi...
+                example: "Password123"
+              role:
+                type: string
+                enum: [admin, committee, participant]
+                default: participant
+                description: Role user dalam sistem
+    responses:
+      201:
+        description: User berhasil dibuat
+      400:
+        description: Bad Request - Validasi gagal (misal email salah format atau password kurang panjang)
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  type: string
+                  example: "fail"
+                message:
+                  type: string
+                  example: "Full name must be at least 3 characters"
+                errors:
+                  type: array
+                  items:
+                    type: object
+
+/api/users/login:
+  post:
+    tags:
+      - Authentication
+    summary: Login untuk mendapatkan JWT
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - email
+              - password
+            properties:
+              email:
+                type: string
+                format: email
+                example: "budi@example.com"
+              password:
+                type: string
+                example: "Password123"
+    responses:
+      200:
+        description: Login Berhasil
+      400:
+        description: Input tidak valid
+      401:
+        description: Email atau Password salah

@@ -1,30 +1,147 @@
-const CompetitionService = require('../services/competition.service');
+const competitionService = require('../services/competition.service');
 
 class CompetitionController {
-  async index(req, res) {
+  /**
+   * Mendapatkan semua kompetisi (dengan Pagination & Search)
+   * GET /api/competitions
+   */
+  async getAll(req, res) {
     try {
-      const data = await CompetitionService.getAllCompetitions();
-      res.status(200).json({ status: 'success', data });
+      const { page, limit, search } = req.query;
+      const result = await competitionService.getCompetitions(page, limit, search);
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Competitions retrieved successfully',
+        data: result
+      });
     } catch (error) {
-      res.status(500).json({ status: 'error', message: error.message });
+      return res.status(500).json({
+        status: 'error',
+        message: error.message
+      });
     }
   }
 
-  async store(req, res) {
+  /**
+   * Mendapatkan detail satu kompetisi berdasarkan ID
+   * GET /api/competitions/:id
+   */
+  async getById(req, res) {
     try {
-      const data = await CompetitionService.createCompetition(req.body);
-      res.status(201).json({ status: 'success', data });
+      const { id } = req.params;
+      const competition = await competitionService.getCompetitionById(id);
+
+      return res.status(200).json({
+        status: 'success',
+        data: { competition }
+      });
     } catch (error) {
-      res.status(400).json({ status: 'error', message: error.message });
+      return res.status(404).json({
+        status: 'fail',
+        message: error.message
+      });
     }
   }
 
-  async show(req, res) {
+  /**
+   * Membuat kompetisi baru (Admin Only)
+   * POST /api/competitions
+   */
+  async create(req, res) {
     try {
-      const data = await CompetitionService.getCompetitionDetail(req.params.id);
-      res.status(200).json({ status: 'success', data });
+      const { title, description, start_date, end_date, status } = req.body;
+
+      const newCompetition = await competitionService.createCompetition({
+        title,
+        description,
+        start_date,
+        end_date,
+        status
+      });
+
+      return res.status(201).json({
+        status: 'success',
+        message: 'Competition created successfully',
+        data: { competition: newCompetition }
+      });
     } catch (error) {
-      res.status(404).json({ status: 'error', message: error.message });
+      return res.status(400).json({
+        status: 'fail',
+        message: error.message
+      });
+    }
+  }
+
+  /**
+   * Memperbarui data kompetisi (Admin/Committee)
+   * PATCH /api/competitions/:id
+   */
+  async update(req, res) {
+    try {
+      const { id } = req.params;
+      const { title, description, start_date, end_date, status } = req.body;
+
+      const updatedCompetition = await competitionService.updateCompetition(id, {
+        title,
+        description,
+        start_date,
+        end_date,
+        status
+      });
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Competition updated successfully',
+        data: { competition: updatedCompetition }
+      });
+    } catch (error) {
+      return res.status(400).json({
+        status: 'fail',
+        message: error.message
+      });
+    }
+  }
+
+  /**
+   * Menghapus kompetisi / Soft Delete (Admin Only)
+   * DELETE /api/competitions/:id
+   */
+  async delete(req, res) {
+    try {
+      const { id } = req.params;
+      const result = await competitionService.deleteCompetition(id);
+
+      return res.status(200).json({
+        status: 'success',
+        message: result.message
+      });
+    } catch (error) {
+      return res.status(404).json({
+        status: 'fail',
+        message: error.message
+      });
+    }
+  }
+
+  /**
+   * Mengembalikan kompetisi yang di-soft delete (Admin Only)
+   * POST /api/competitions/:id/restore
+   */
+  async restore(req, res) {
+    try {
+      const { id } = req.params;
+      const result = await competitionService.restoreCompetition(id);
+
+      return res.status(200).json({
+        status: 'success',
+        message: result.message
+      });
+    } catch (error) {
+      return res.status(400).json({
+        status: 'fail',
+        message: error.message
+      });
     }
   }
 }

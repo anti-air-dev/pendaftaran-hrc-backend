@@ -1,23 +1,32 @@
-const STATIC_TOKEN = 'SECRET123';
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = process.env.JWT_SECRET || 'fallback_secret_key';
 
-module.exports = (req, res, next) => {
-  const authHeader = req.headers['authorization'];
-
-  // cek apakah header ada
-  if (!authHeader) {
+const authMiddleware = (req, res, next) => {
+  // 1. Ambil token dari header 'Authorization'
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({
-      message: 'Unauthorized: No token provided'
+      status: 'fail',
+      message: 'Access denied. No token provided.'
     });
   }
 
-  // format: Bearer TOKEN
   const token = authHeader.split(' ')[1];
 
-  if (token !== STATIC_TOKEN) {
-    return res.status(403).json({
-      message: 'Forbidden: Invalid token'
+  try {
+    // 2. Verifikasi token
+    const decoded = jwt.verify(token, JWT_SECRET);
+    
+    // 3. Simpan data user dari token ke dalam object 'req' agar bisa dipakai di controller
+    req.user = decoded; 
+    next(); // Lanjut ke proses berikutnya
+  } catch (error) {
+    return res.status(401).json({
+      status: 'fail',
+      message: 'Invalid or expired token.'
     });
   }
-
-  next();
 };
+
+module.exports = authMiddleware;
