@@ -33,7 +33,7 @@ module.exports = (sequelize, DataTypes) => {
     },
     status: {
       type: DataTypes.STRING,
-      defaultValue: 'unverified'
+      defaultValue: 'active'
     }
   }, {
     sequelize,
