@@ -1,13 +1,14 @@
-@startuml erd
+@startuml competition_system_v2
 
 entity users {
-    * id : bigint
+    * id : bigint <<PK>>
     --
-    * name : varchar
-    * username : varchar <U>
-    * email : varchar <U>
+    * full_name : varchar
+    * username : varchar <<U>>
+    * email : varchar <<U>>
     * password : varchar
-    * role : varchar (admin, panitia, peserta)
+    * role : varchar # 'admin', 'committee', 'participant'
+    * status : varchar # 'active', 'inactive', 'suspended', 'unverified' 
     --
     * created_at : timestamp
     * updated_at : timestamp
@@ -15,13 +16,14 @@ entity users {
 }
 
 entity competitions {
-    * id : bigint
+    * id : bigint <<PK>>
     --
-    * name : varchar
+    * title : varchar
+    * slug : varchar <<fU>>
     * description : text
     * start_date : date
     * end_date : date
-
+    * status : varchar # 'draft', 'published', 'archived'
     --
     * created_at : timestamp
     * updated_at : timestamp
@@ -29,37 +31,33 @@ entity competitions {
 }
 
 entity sub_competitions {
-    * id : bigint
-    * competition_id : bigint
+    * id : bigint <<PK>>
+    * competition_id : bigint <<FK>>
     --
     * name : varchar
-    * description : text
+    * slug : varchar <<U>>
+    * category : varchar # 'student', 'college', 'general'
+    * min_participants : int
+    * max_participants : int
+    * thumbnail_path: varchar
+    * guidebook_path : varchar
     * registration_fee : decimal
+    * registration_start : timestamp
+    * registration_end : timestamp
+    * status : varchar # 'open', 'closed', 'maintenance' 
     --
     * created_at : timestamp
     * updated_at : timestamp
     deleted_at : timestamp
 }
 
-entity guidebooks {
-    * id : bigint
-    * competition_id : bigint
-    --
-    * title : varchar
-    * file_path : varchar
-    --
-    * created_at : timestamp
-    * updated_at : timestamp
-    deleted_at : timestamp
-}
 
 entity teams {
-    * id : bigint
-    * user_id : bigint
+    * id : bigint <<PK>>
+    * leader_id : bigint <<FK>> (users.id)
     --
     * team_name : varchar
     * institution : varchar
-    * created_at : timestamp
     --
     * created_at : timestamp
     * updated_at : timestamp
@@ -67,12 +65,14 @@ entity teams {
 }
 
 entity team_members {
-    * id : bigint
+    * id : bigint <<PK>>
+    * team_id : bigint <<FK>>
     --
-    team_id : bigint
-    member_name : varchar
-    member_email : varchar
-    member_role : varchar
+    * full_name : varchar
+    * email : varchar
+    * identity_card_path : varchar
+    * role_in_team : varchar # 'leader', 'member'
+    * verification_status : varchar # 'pending', 'verified', 'rejected'
     --
     * created_at : timestamp
     * updated_at : timestamp
@@ -80,12 +80,11 @@ entity team_members {
 }
 
 entity registrations {
-    * id : bigint
-    * team_id : bigint
-    * sub_competition_id : bigint
+    * id : bigint <<PK>>
+    * team_id : bigint <<FK>>
+    * sub_competition_id : bigint <<FK>>
     --
-    * registration_status : enum
-    * registered_at : timestamp
+    * registration_status : varchar # 'awaiting_payment', 'pending_verification', 'registered', 'rejected'
     --
     * created_at : timestamp
     * updated_at : timestamp
@@ -93,17 +92,16 @@ entity registrations {
 }
 
 entity payments {
-    * id : bigint
-    * registration_id : bigint
+    * id : bigint <<PK>>
+    * registration_id : bigint <<FK>>
     --
+    * transaction_id : varchar <<U>>
+    * amount : decimal
     * payment_method : varchar
-    * payment_status : varchar
-    * transaction_id : varchar
-    paid_at : timestamp
+    * payment_status : varchar # 'pending', 'completed', 'failed', 'expired'
+    * paid_at : timestamp
     --
     * created_at : timestamp
-    * updated_at : timestamp
-    deleted_at : timestamp
 }
 
 users ||--o{ teams
@@ -111,8 +109,6 @@ teams ||--o{ team_members
 teams ||--o{ registrations
 sub_competitions ||--o{ registrations
 registrations ||--|| payments
-
 competitions ||--o{ sub_competitions
-competitions ||--o{ guidebooks
 
 @enduml
