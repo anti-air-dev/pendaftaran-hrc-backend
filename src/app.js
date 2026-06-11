@@ -43,12 +43,21 @@ app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 const userRoutes = require('./routes/user.routes');
 const competitionRoutes = require('./routes/competition.routes');
 const subCompetitionRoutes = require("./routes/sub-competition.routes");
+const teamRoutes = require("./routes/team.routes");
 
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 app.use('/api/users', userRoutes);
 app.use('/api/competitions', competitionRoutes);
 app.use('/api/sub-competitions', subCompetitionRoutes);
+app.use('/api/teams/', teamRoutes);
+
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({
+    status: 'error',
+    message: err.message || 'Internal Server Error'
+  });
+});
 
 // ... rest of your code
 module.exports = app;

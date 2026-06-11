@@ -54,7 +54,7 @@ entity sub_competitions {
 
 entity teams {
     * id : bigint <<PK>>
-    * leader_id : bigint <<FK>> (users.id)
+    * leader_id : bigint <<FK>> (team_members.id)
     --
     * team_name : varchar
     * institution : varchar

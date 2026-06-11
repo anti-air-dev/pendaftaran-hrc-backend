@@ -47,6 +47,7 @@ class SubCompetitionService {
   async createSubCompetition(data) {
     // Generate slug dari field 'name'
     const slug = data.name
+      .trim()
       .toLowerCase()
       .replace(/[^a-z0-9\s-]/g, '')
       .replace(/\s+/g, '-');
