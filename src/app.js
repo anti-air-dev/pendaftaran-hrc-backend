@@ -44,6 +44,9 @@ const userRoutes = require('./routes/user.routes');
 const competitionRoutes = require('./routes/competition.routes');
 const subCompetitionRoutes = require("./routes/sub-competition.routes");
 const teamRoutes = require("./routes/team.routes");
+const registrationRoutes = require("./routes/registration.routes");
+const paymentRoutes = require("./routes/payment.routes");
+const teamMemberRoutes = require("./routes/team-member.routes");
 
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
@@ -51,6 +54,9 @@ app.use('/api/users', userRoutes);
 app.use('/api/competitions', competitionRoutes);
 app.use('/api/sub-competitions', subCompetitionRoutes);
 app.use('/api/teams/', teamRoutes);
+app.use('/api/registrations/', registrationRoutes);
+app.use('/api/payments/', paymentRoutes);
+app.use('/api/team-members/', teamMemberRoutes);
 
 app.use((err, req, res, next) => {
   res.status(err.status || 500).json({

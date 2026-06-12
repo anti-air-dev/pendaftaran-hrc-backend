@@ -26,6 +26,16 @@ module.exports = (sequelize) => {
       allowNull: false,
       validate: { isEmail: { msg: 'Must be a valid email address.' } }
     },
+    phoneNumber: {
+    type: DataTypes.STRING,
+    allowNull: true, // Sesuaikan dengan migration
+    field: 'phone_number' // Memastikan mapping ke snake_case di database
+    },
+    identityNumber: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      field: 'identity_number'
+    },
     identityCardPath: { type: DataTypes.STRING, allowNull: false, field: 'identity_card_path' },
     roleInTeam: { type: DataTypes.STRING, allowNull: false, field: 'role_in_team' },
     verificationStatus: { type: DataTypes.STRING, allowNull: false, field: 'verification_status' }

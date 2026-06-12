@@ -19,6 +19,7 @@ class TeamRepository {
       where: whereClause,
       limit: limit,
       offset: offset,
+      distinct: true,
       order: [['created_at', 'DESC']],
       include: [
         {

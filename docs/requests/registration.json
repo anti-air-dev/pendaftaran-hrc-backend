@@ -1,0 +1,24 @@
+{
+  "subCompetitionId": 1,
+  "team": { "teamName": "Antares", "institution": "UGM" },
+  "leader": {
+    "fullName": "Eko Saputra",
+    "email": "eko@ugm.ac.id",
+    "phoneNumber": "081234567890",
+    "identityNumber": "21/44521/TK/52132"
+  },
+  "members": [
+    {
+      "fullName": "Rizky Amalia",
+      "email": "rizky@ugm.ac.id",
+      "phoneNumber": "089876543210",
+      "identityNumber": "21/44522/TK/52133"
+    },
+    {
+      "fullName": "Bambang Pamungkas",
+      "email": "bambang@ugm.ac.id",
+      "phoneNumber": "085211223344",
+      "identityNumber": "21/44523/TK/52134"
+    }
+  ]
+}
