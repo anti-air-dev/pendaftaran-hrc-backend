@@ -34,6 +34,7 @@
 
 # Nama Proyek Kamu
 
-![CI Status](https://github.com/anti-air-dev/pendaftaran-hrc-backend/workflows/Node.js%20CI%20Pipeline/badge.svg)
+![CI Status](https://github.com/anti-air-dev/pendaftaran-hrc-backend/actions/workflows/test.yml/badge.svg)
+
 
 Aplikasi pendaftaran lomba berbasis Node.js, Express, dan Sequelize.
