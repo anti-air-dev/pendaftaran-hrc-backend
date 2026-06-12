@@ -26,19 +26,17 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
+      - name: Checkout repository data
+        uses: actions/checkout@v4
 
       - name: Setup Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
+          # Pastikan baris cache: 'npm' SUDAH TIDAK ADA di sini
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install # <--- DIUBAH DARI 'npm ci' MENJADI 'npm install'
 
       - name: Run Sequelize Migrations
         run: npx sequelize-cli db:migrate --env test
@@ -46,7 +44,7 @@ jobs:
           NODE_ENV: test
           DB_HOST: 127.0.0.1
           DB_USER: root
-          DB_PASSWORD: "" # Mengosongkan password agar Sequelize membaca null/empty
+          DB_PASSWORD: ""
           DB_TEST_NAME: database_test
 
       - name: Execute Jest Test Suite with Coverage
@@ -55,5 +53,5 @@ jobs:
           NODE_ENV: test
           DB_HOST: 127.0.0.1
           DB_USER: root
-          DB_PASSWORD: "" # Tetap kosongkan di proses testing
+          DB_PASSWORD: ""
           DB_TEST_NAME: database_test
