@@ -26,3 +26,14 @@
   - get /payments/{id}
   - update /payments/{id}
   - delete /payments/{id}
+
+## Code Coverage Report
+![Coverage Screenshot](./path-to-your-screenshot/coverage.png)
+*Target: Minimal 75% Code Coverage tercapai.*
+
+
+# Nama Proyek Kamu
+
+![CI Status](https://github.com/anti-air-dev/pendaftaran-hrc-backend/workflows/Node.js%20CI%20Pipeline/badge.svg)
+
+Aplikasi pendaftaran lomba berbasis Node.js, Express, dan Sequelize.

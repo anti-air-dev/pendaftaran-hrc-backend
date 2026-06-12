@@ -1,9 +1,6 @@
 const { Registration, Team, SubCompetition, Payment } = require('../models');
 
 class RegistrationRepository {
-  /**
-   * Mendapatkan semua pendaftaran (bisa difilter berdasarkan status)
-   */
   async findAll(filters = {}) {
     return await Registration.findAll({
       where: filters,
@@ -16,9 +13,6 @@ class RegistrationRepository {
     });
   }
 
-  /**
-   * Mendapatkan detail pendaftaran berdasarkan ID
-   */
   async findById(id) {
     return await Registration.findByPk(id, {
       include: [
@@ -29,37 +23,30 @@ class RegistrationRepository {
     });
   }
 
-  /**
-   * Mengecek apakah sebuah tim sudah mendaftar di sub-lomba tertentu
-   */
   async findByTeamAndSubCompetition(teamId, subCompetitionId) {
     return await Registration.findOne({
       where: { teamId, subCompetitionId }
     });
   }
 
-  /**
-   * Membuat pendaftaran baru
-   */
-  async create(registrationData) {
-    return await Registration.create(registrationData);
+  // Menerima options untuk transaction penulisan data berlapis
+  async create(registrationData, options = {}) {
+    return await Registration.create(registrationData, options);
   }
 
-  /**
-   * Memperbarui status pendaftaran (Optimized)
-   */
-  async update(id, updateData) {
-    const [affectedRows] = await Registration.update(updateData, { where: { id } });
+  async update(id, updateData, options = {}) {
+    const [affectedRows] = await Registration.update(updateData, { where: { id }, ...options });
     if (affectedRows === 0) return null;
     return this.findById(id);
   }
 
-  /**
-   * Soft Delete pendaftaran (jika tim batal ikut)
-   */
-  async softDelete(id) {
-    return await Registration.destroy({ where: { id } });
+  async softDelete(id, options = {}) {
+    return await Registration.destroy({ where: { id }, ...options });
   }
+
+  // async hardDelete(id, options = {force: true}) {
+  //   return await Registration.destroy({ where: { id }, ...options });
+  // }
 }
 
 module.exports = new RegistrationRepository();

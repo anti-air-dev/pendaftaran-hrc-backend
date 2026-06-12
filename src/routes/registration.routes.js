@@ -5,14 +5,31 @@ const registrationController = require('../controllers/registration.controller')
 const { validateRegistration } = require('../validators/registration.validator');
 const handleRegistrationUpload = require('../middlewares/upload-registration.middleware');
 
-// Endpoint POST pendaftaran (Menggunakan Validator sebelum masuk ke Controller)
+// Middleware pembantu untuk menyatukan text field multipart ke req.body pencocokan validator
+const parseRegistrationPayload = (req, res, next) => {
+  if (req.body && typeof req.body.payload === 'string') {
+    try {
+      req.body = { ...req.body, ...JSON.parse(req.body.payload) };
+    } catch (error) {
+      return res.status(400).json({ success: false, message: 'Invalid JSON payload format.' });
+    }
+  }
+  next();
+};
 
-router.post('/', handleRegistrationUpload, validateRegistration, registrationController.register);
+// POST - Menggunakan urutan: Upload -> Parse JSON -> Validasi Schema -> Controller
+router.post('/', handleRegistrationUpload, parseRegistrationPayload, validateRegistration, registrationController.register);
 
-// Endpoint GET all
+// GET All
 router.get('/', registrationController.getAll);
 
-// Endpoint GET by ID
+// GET by ID
 router.get('/:id', registrationController.getById);
+
+// PUT Update
+router.put('/:id', registrationController.update);
+
+// DELETE
+router.delete('/:id', registrationController.delete);
 
 module.exports = router;

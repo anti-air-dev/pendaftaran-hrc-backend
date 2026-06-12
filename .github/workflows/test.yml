@@ -1,0 +1,57 @@
+name: Node.js CI Pipeline
+
+on:
+  push:
+    branches: [main, master, development]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  test-and-coverage:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    services:
+      # Menyediakan database MySQL otomatis di dalam runner GitHub
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ALLOW_EMPTY_PASSWORD: "yes" # Mengizinkan password kosong sesuai default config test kamu (null)
+          MYSQL_DATABASE: database_test # Menyamakan nama database default sesuai config.test
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
+    steps:
+      - name: Checkout repository data
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Sequelize Migrations
+        run: npx sequelize-cli db:migrate --env test
+        env:
+          NODE_ENV: test
+          DB_HOST: 127.0.0.1
+          DB_USER: root
+          DB_PASSWORD: "" # Mengosongkan password agar Sequelize membaca null/empty
+          DB_TEST_NAME: database_test
+
+      - name: Execute Jest Test Suite with Coverage
+        run: npm run test:coverage
+        env:
+          NODE_ENV: test
+          DB_HOST: 127.0.0.1
+          DB_USER: root
+          DB_PASSWORD: "" # Tetap kosongkan di proses testing
+          DB_TEST_NAME: database_test
