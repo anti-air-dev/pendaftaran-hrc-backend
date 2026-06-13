@@ -27,16 +27,19 @@ describe('Registration Complete REST API Regression Test Suite', () => {
       });
 
       // 3. Buat data sub-kompetisi (Lengkap dengan parameter partisipan & tanggal)
+      // 3. Buat data sub-kompetisi (Lengkap dengan parameter partisipan, tanggal, dan file pendukung)
       const sub = await SubCompetition.create({
         competition_id: mainComp.id,
         name: 'Robotic Competition',
         slug: 'robotic-competition',
         category: 'student',
-        min_participants: 1,           // <-- TAMBAHKAN INI
-        max_participants: 3,           // <-- TAMBAHKAN INI
+        min_participants: 1,
+        max_participants: 3,
         registration_fee: 80000.00,
-        registration_start: '2026-06-01 00:00:00', // <-- TAMBAHKAN INI
-        registration_end: '2026-06-25 23:59:59',   // <-- TAMBAHKAN INI
+        registration_start: '2026-06-01 00:00:00',
+        registration_end: '2026-06-25 23:59:59',
+        thumbnail_path: '/uploads/dummy-thumbnail.jpg', // <-- Mencegah error 'thumbnail_path'
+        guidebook_path: '/uploads/dummy-guidebook.pdf', // <-- Jaga-jaga jika ini juga diwajibkan di migrasi
         status: 'open'
       });
       subCompId = sub.id;
