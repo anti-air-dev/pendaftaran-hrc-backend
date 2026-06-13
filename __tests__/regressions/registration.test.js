@@ -16,16 +16,19 @@ describe('Registration Complete REST API Regression Test Suite', () => {
       }
       await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
 
-      // 2. Buat data Kompetisi Induk dengan field wajib (title & slug) sesuai model
+      // 2. Buat data Kompetisi Induk dengan semua field wajib sesuai file migrasi
       const mainComp = await Competition.create({
         title: 'HRC National Competition 2026',
         slug: 'hrc-national-competition-2026',
+        description: 'Ini adalah deskripsi resmi kompetisi HRC 2026',
+        start_date: '2026-06-01', // Diisi karena allowNull: false di migrasi
+        end_date: '2026-06-30',   // Diisi karena allowNull: false di migrasi
         status: 'published'
       });
 
-      // 3. Buat data sub-kompetisi dengan menggunakan key 'competition_id' (snake_case)
+      // 3. Buat data sub-kompetisi
       const sub = await SubCompetition.create({
-        competition_id: mainComp.id, // <-- Menggunakan snake_case sesuai definisi di modelmu
+        competition_id: mainComp.id,
         name: 'Robotic Competition',
         slug: 'robotic-competition',
         category: 'student',
