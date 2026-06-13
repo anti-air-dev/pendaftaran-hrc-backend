@@ -16,23 +16,27 @@ describe('Registration Complete REST API Regression Test Suite', () => {
       }
       await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
 
-      // 2. Buat data Kompetisi Induk dengan semua field wajib sesuai file migrasi
+      // 2. Buat data Kompetisi Induk
       const mainComp = await Competition.create({
         title: 'HRC National Competition 2026',
         slug: 'hrc-national-competition-2026',
         description: 'Ini adalah deskripsi resmi kompetisi HRC 2026',
-        start_date: '2026-06-01', // Diisi karena allowNull: false di migrasi
-        end_date: '2026-06-30',   // Diisi karena allowNull: false di migrasi
+        start_date: '2026-06-01',
+        end_date: '2026-06-30',
         status: 'published'
       });
 
-      // 3. Buat data sub-kompetisi
+      // 3. Buat data sub-kompetisi (Lengkap dengan parameter partisipan & tanggal)
       const sub = await SubCompetition.create({
         competition_id: mainComp.id,
         name: 'Robotic Competition',
         slug: 'robotic-competition',
         category: 'student',
+        min_participants: 1,           // <-- TAMBAHKAN INI
+        max_participants: 3,           // <-- TAMBAHKAN INI
         registration_fee: 80000.00,
+        registration_start: '2026-06-01 00:00:00', // <-- TAMBAHKAN INI
+        registration_end: '2026-06-25 23:59:59',   // <-- TAMBAHKAN INI
         status: 'open'
       });
       subCompId = sub.id;
