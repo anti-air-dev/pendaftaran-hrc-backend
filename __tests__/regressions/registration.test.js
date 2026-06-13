@@ -7,20 +7,34 @@ describe('Registration Complete REST API Regression Test Suite', () => {
   let createdRegistrationId = null;
 
   beforeAll(async () => {
-    await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
-    for (const modelName of Object.keys(sequelize.models)) {
-      await sequelize.models[modelName].destroy({ where: {}, truncate: true, force: true });
-    }
-    await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
+    try {
+      // 1. Matikan sementara foreign key check untuk membersihkan data lama
+      await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
+      for (const modelName of Object.keys(sequelize.models)) {
+        await sequelize.models[modelName].destroy({ where: {}, truncate: true, force: true });
+      }
+      await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
 
-    const sub = await SubCompetition.create({
-      name: 'Mobile App Development Competition',
-      slug: 'mobile-app-dev',
-      category: 'student',
-      registration_fee: 80000.00,
-      status: 'open'
-    });
-    subCompId = sub.id;
+      // 2. Buat data sub kompetisi tiruan
+      const sub = await SubCompetition.create({
+        name: 'Robotic Competition',
+        slug: 'robotic-competition',
+        category: 'student',
+        registration_fee: 80000.00,
+        status: 'open'
+      });
+      subCompId = sub.id;
+
+    } catch (error) {
+      // KUNCI UTAMA: Memaksa log menampilkan detail error validasi/database asli dari MySQL
+      console.error("\n🚨 LOG ERROR DATABASE ASLI DI BEFOREALL:\n", error);
+      throw error; 
+    }
+  });
+
+  // Tambahkan ini di paling bawah suite (sebelum penutup describe) untuk fix Jest Open Handles
+  afterAll(async () => {
+    await sequelize.close();
   });
 
   // ==========================================
@@ -53,7 +67,7 @@ describe('Registration Complete REST API Regression Test Suite', () => {
   it('2. POST /api/registrations - Harus gagal (400) jika skema data melanggar validator', async () => {
     const badPayload = {
       subCompetitionId: subCompId,
-      team: { teamName: '' }, // Nama tim kosong sengaja memicu bad request
+      team: { teamName: '' },
       leader: { email: 'bukan-email-valid' }
     };
 
@@ -62,19 +76,18 @@ describe('Registration Complete REST API Regression Test Suite', () => {
       .field('payload', JSON.stringify(badPayload));
 
     expect(res.statusCode).toEqual(400);
-    // Disesuaikan dengan struktur JSON dari validator kamu ({ status: 'fail' })
     expect(res.body.status).toBe('fail');
     expect(res.body).toHaveProperty('errors');
   });
 
   it('3. POST /api/registrations - Harus gagal (404) jika data valid tapi sub-kompetisi ID tidak ada di DB', async () => {
     const validPayloadWithBadId = {
-      subCompetitionId: 99999, // ID salah untuk memicu 404 dari Service
+      subCompetitionId: 99999,
       team: { teamName: 'Phantom Tech', institution: 'Institut Teknologi' },
       leader: { 
         fullName: 'Ghost User', 
         email: 'ghost@hrc.com', 
-        phoneNumber: '081234567890', // Pastikan nomor valid (11-12 digit) untuk lolos 'id-ID'
+        phoneNumber: '081234567890',
         identityNumber: '320100000' 
       },
       members: []
@@ -83,10 +96,8 @@ describe('Registration Complete REST API Regression Test Suite', () => {
     const res = await request(app)
       .post('/api/registrations')
       .field('payload', JSON.stringify(validPayloadWithBadId))
-      // WAJIB ATTACH FILE agar lolos dari jeratan Validator dan masuk ke Service Check!
       .attach('leaderIdentityCard', Buffer.from('PDF_KETUA_BUFFER'), 'leader_card.pdf');
 
-    // Sekarang pasti lolos dari validator (400) dan sukses menghasilkan 404 dari Service
     expect(res.statusCode).toEqual(404);
   });
 
