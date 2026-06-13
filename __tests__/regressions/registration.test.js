@@ -75,6 +75,9 @@ describe('Registration Complete REST API Regression Test Suite', () => {
       .attach('leaderIdentityCard', Buffer.from('PDF_KETUA_BUFFER'), 'leader_card.pdf')
       .attach('memberIdentityCards', Buffer.from('PDF_ANGGOTA_BUFFER'), 'member_card1.pdf');
 
+    // TAMBAHKAN BARIS INI UNTUK MELIHAT PESAN ERROR DARI VALIDATOR POST
+    console.log("🚨 DETAIL ERROR VALIDASI POST:", JSON.stringify(res.body, null, 2));
+
     expect(res.statusCode).toEqual(201);
     expect(res.body.success).toBe(true);
     expect(res.body.data).toHaveProperty('id');
@@ -148,6 +151,9 @@ describe('Registration Complete REST API Regression Test Suite', () => {
     const res = await request(app)
       .put(`/api/registrations/${createdRegistrationId}`)
       .send({ registrationStatus: 'verified' });
+
+    // TAMBAHKAN BARIS INI UNTUK MELIHAT PESAN ERROR DARI VALIDATOR PUT
+    console.log("🚨 DETAIL ERROR VALIDASI PUT:", JSON.stringify(res.body, null, 2));
 
     expect(res.statusCode).toEqual(200);
     expect(res.body.success).toBe(true);
