@@ -1,6 +1,7 @@
 const request = require('supertest');
 const app = require('../../src/app');
-const { sequelize, SubCompetition } = require('../../src/models');
+// 1. Tambahkan "Competition" di dalam destructuring import model
+const { sequelize, SubCompetition, Competition } = require('../../src/models');
 
 describe('Registration Complete REST API Regression Test Suite', () => {
   let subCompId = null;
@@ -15,8 +16,16 @@ describe('Registration Complete REST API Regression Test Suite', () => {
       }
       await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
 
-      // 2. Buat data sub kompetisi tiruan
+      // 2. Buat data Kompetisi Induk dengan field wajib (title & slug) sesuai model
+      const mainComp = await Competition.create({
+        title: 'HRC National Competition 2026',
+        slug: 'hrc-national-competition-2026',
+        status: 'published'
+      });
+
+      // 3. Buat data sub-kompetisi dengan menggunakan key 'competition_id' (snake_case)
       const sub = await SubCompetition.create({
+        competition_id: mainComp.id, // <-- Menggunakan snake_case sesuai definisi di modelmu
         name: 'Robotic Competition',
         slug: 'robotic-competition',
         category: 'student',
@@ -26,13 +35,12 @@ describe('Registration Complete REST API Regression Test Suite', () => {
       subCompId = sub.id;
 
     } catch (error) {
-      // KUNCI UTAMA: Memaksa log menampilkan detail error validasi/database asli dari MySQL
       console.error("\n🚨 LOG ERROR DATABASE ASLI DI BEFOREALL:\n", error);
       throw error; 
     }
   });
 
-  // Tambahkan ini di paling bawah suite (sebelum penutup describe) untuk fix Jest Open Handles
+  // Memastikan koneksi ditutup secara bersih setelah semua test case selesai
   afterAll(async () => {
     await sequelize.close();
   });
