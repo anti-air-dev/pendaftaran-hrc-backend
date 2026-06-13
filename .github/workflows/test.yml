@@ -48,7 +48,7 @@ jobs:
           DB_TEST_NAME: database_test
 
       - name: Execute Jest Test Suite with Coverage
-        run: npm run test:coverage
+        run: npx jest registration.test.js --coverage --collectCoverageFrom="src/**/registration*"
         env:
           NODE_ENV: test
           DB_HOST: 127.0.0.1
