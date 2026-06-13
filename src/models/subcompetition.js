@@ -20,7 +20,11 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BIGINT,
       field: 'competition_id'
     },
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    
     slug: {
       type: DataTypes.STRING,
       allowNull: false,

@@ -16,7 +16,7 @@ module.exports = (sequelize) => {
         as: 'leader'
       });
 
-      // Relasi ke tabel TeamMembers sebagai anggota biasa
+      // Relasi ke tabel TeamMembers sebagai anggota bias
       this.hasMany(models.TeamMember, {
         foreignKey: 'teamId', // <-- UBAH JUGA DI SINI (jika sebelumnya team_id)
         as: 'members'

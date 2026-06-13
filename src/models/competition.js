@@ -22,7 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       unique: true
     },
-    description: DataTypes.TEXT,
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false // <-- Ini penyebabnya! Kolom ini wajib diisi di level DB/Migrasi.
+    },
     start_date: {
       type: DataTypes.DATEONLY,
       field: 'start_date' // Pemetaan dari DB snake_case ke JS camelCase
