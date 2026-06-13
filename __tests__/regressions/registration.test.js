@@ -9,14 +9,25 @@ describe('Registration Complete REST API Regression Test Suite', () => {
 
   beforeAll(async () => {
     try {
-      // 1. Matikan sementara foreign key check untuk membersihkan data lama
+      // 1. Bersihkan database
       await sequelize.query('SET FOREIGN_KEY_CHECKS = 0');
       for (const modelName of Object.keys(sequelize.models)) {
         await sequelize.models[modelName].destroy({ where: {}, truncate: true, force: true });
       }
       await sequelize.query('SET FOREIGN_KEY_CHECKS = 1');
 
-      // 2. Buat data Kompetisi Induk
+      // 2. BUAT DATA USER DUMMY SESUAI ERD (Agar Foreign Key 'leader_id' terpenuhi)
+      const dummyUser = await sequelize.models.User.create({
+        id: 1, // Kita paksa ID 1 untuk mengantisipasi mock auth/middleware di sistemmu
+        full_name: 'Budi Utomo',
+        username: 'budiutomo_test',
+        email: 'budi@hrc.com',
+        password: 'hashedpassword123',
+        role: 'participant',
+        status: 'active'
+      });
+
+      // 3. Buat data Kompetisi Induk
       const mainComp = await Competition.create({
         title: 'HRC National Competition 2026',
         slug: 'hrc-national-competition-2026',
@@ -26,8 +37,7 @@ describe('Registration Complete REST API Regression Test Suite', () => {
         status: 'published'
       });
 
-      // 3. Buat data sub-kompetisi (Lengkap dengan parameter partisipan & tanggal)
-      // 3. Buat data sub-kompetisi (Lengkap dengan parameter partisipan, tanggal, dan file pendukung)
+      // 4. Buat data sub-kompetisi
       const sub = await SubCompetition.create({
         competition_id: mainComp.id,
         name: 'Robotic Competition',
@@ -38,8 +48,8 @@ describe('Registration Complete REST API Regression Test Suite', () => {
         registration_fee: 80000.00,
         registration_start: '2026-06-01 00:00:00',
         registration_end: '2026-06-25 23:59:59',
-        thumbnail_path: '/uploads/dummy-thumbnail.jpg', // <-- Mencegah error 'thumbnail_path'
-        guidebook_path: '/uploads/dummy-guidebook.pdf', // <-- Jaga-jaga jika ini juga diwajibkan di migrasi
+        thumbnail_path: '/uploads/dummy-thumbnail.jpg', 
+        guidebook_path: '/uploads/dummy-guidebook.pdf', 
         status: 'open'
       });
       subCompId = sub.id;
