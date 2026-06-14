@@ -1,14 +1,17 @@
 const registrationService = require('../services/registration.service');
+const { matchedData } = require('express-validator'); 
+
 
 class RegistrationController {
   async register(req, res) {
     try {
-      let payload = req.body;
-      if (typeof req.body.payload === 'string') {
-        payload = JSON.parse(req.body.payload);
-      }
+      // 🚨 MENGAMBIL DATA YANG BERSIH & TERVALIDASI SAJA
+      // includeOptionals: true memastikan field optional (seperti members) tetap ikut jika ada
+      const validatedPayload = matchedData(req, { includeOptionals: true });
 
-      const result = await registrationService.registerNewTeamAndMembers(payload, req.files);
+      // Kirim validatedPayload ke service, JANGAN req.body
+      const result = await registrationService.registerNewTeamAndMembers(validatedPayload, req.files);
+      
       return res.status(201).json({
         success: true,
         message: 'Registration created successfully.',

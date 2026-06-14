@@ -107,7 +107,7 @@ describe('Registration Complete REST API Regression Test Suite', () => {
       .field('payload', JSON.stringify(badPayload));
 
     expect(res.statusCode).toEqual(400);
-    expect(res.body.status).toBe('fail');
+    expect(res.body.success).toBe(false);
     expect(res.body).toHaveProperty('errors');
   });
 
