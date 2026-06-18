@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-  # Service untuk Backend API kamu
   backend:
     build: .
     container_name: hrc-backend
@@ -10,27 +9,34 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=5000
-      - DB_HOST=database # Menghubungkan ke service database di bawah
-      - DB_PORT=3306     # Port standar MySQL
+      - DB_HOST=database
+      - DB_PORT=3306
       - DB_USER=hrc_user
       - DB_PASSWORD=hrc_secret_password
       - DB_NAME=pendaftaran_hrc
     depends_on:
-      - database
+      database:
+        condition: service_healthy # Ganti baris ini agar menunggu MySQL sehat
 
-  # Service untuk Database MySQL
   database:
     image: mysql:8.0
     container_name: hrc-database
     ports:
       - "3307:3306"
     environment:
-      - MYSQL_ROOT_PASSWORD=super_secret_root_password # Password untuk user 'root'
-      - MYSQL_DATABASE=pendaftaran_hrc                # Otomatis membuat database ini saat pertama kali jalan
-      - MYSQL_USER=hrc_user                            # Membuat user baru
-      - MYSQL_PASSWORD=hrc_secret_password            # Password untuk user baru
+      - MYSQL_ROOT_PASSWORD=super_secret_root_password
+      - MYSQL_DATABASE=pendaftaran_hrc
+      - MYSQL_USER=hrc_user
+      - MYSQL_PASSWORD=hrc_secret_password
     volumes:
-      - mysql_data:/var/lib/mysql # Agar data MySQL tidak hilang saat container dimatikan
+      - mysql_data:/var/lib/mysql
+    # --- Tambahkan blok healthcheck di bawah ini ---
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "hrc_user", "-phrc_secret_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
 volumes:
-  mysql_data: # Menyimpan data database secara lokal di komputer kamu
+  mysql_data:

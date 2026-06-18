@@ -9,9 +9,10 @@
   "scripts": {
     "test": "jest --detectOpenHandles",
     "test:coverage": "jest --coverage --detectOpenHandles",
-    "dev": "nodemon ./src/server.js",
-    "docker": "docker exec -it pendaftaran-hrc-api-server-1 sh",
-    "mysql": "docker exec -it pendaftaran-hrc-mysql-db-1 mysql -u root -p"
+    "start": "node ./src/server.js",                 
+    "dev": "nodemon ./src/server.js",                
+    "docker": "docker exec -it hrc-backend sh",       
+    "mysql": "docker exec -it hrc-database mysql -u root -p"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
