@@ -36,7 +36,7 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
-      start_period: 10s
+      start_period: 15s # Berikan waktu lebih lama di VPS untuk inisialisasi awal
 
 volumes:
   mysql_data:
