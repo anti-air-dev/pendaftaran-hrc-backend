@@ -48,6 +48,12 @@ const registrationRoutes = require("./routes/registration.routes");
 const paymentRoutes = require("./routes/payment.routes");
 const teamMemberRoutes = require("./routes/team-member.routes");
 
+app.get('/', (req, res) => {
+  return res.json({
+    'message' : "HRC API is Running :3"
+  })
+})
+
 app.use('/uploads', express.static(path.join(__dirname, '../public/uploads')));
 
 app.use('/api/users', userRoutes);
