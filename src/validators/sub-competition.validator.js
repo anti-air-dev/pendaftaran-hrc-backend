@@ -19,7 +19,7 @@ const validateResult = (req, res, next) => {
 /**
  * Aturan Validasi untuk CREATE Sub-Kompetisi (POST)
  */
-const validateCreateSubCompetition = [
+const validateCreateSubCompetition = [ 
   body('competition_id')
     .notEmpty().withMessage('Competition ID is required')
     .isInt().withMessage('Competition ID must be a valid integer number'),
