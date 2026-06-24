@@ -19,7 +19,7 @@ class CompetitionRepository {
       where: whereClause,
       limit: limit,
       offset: offset,
-      order: [['createdAt', 'DESC']], // Sequelize otomatis memetakan ke created_at karena underscored: true
+      order: [['created_at', 'DESC']], // Sequelize otomatis memetakan ke created_at karena underscored: true
       // Opsional: Sertakan sub-kompetisinya jika ingin langsung tampil di list
       include: [
         {

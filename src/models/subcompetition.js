@@ -70,7 +70,9 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'sub_competitions',
     underscored: true,
     paranoid: true,
-    deletedAt: 'deleted_at'
+    deletedAt: 'deleted_at',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at'
   });
   return SubCompetition;
 };

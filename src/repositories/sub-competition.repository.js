@@ -22,7 +22,7 @@ class SubCompetitionRepository {
       where: whereClause,
       limit: limit,
       offset: offset,
-      order: [['createdAt', 'DESC']],
+      order: [['created_at', 'DESC']],
       // Otomatis join dengan table Competition utama
       include: [
         {
