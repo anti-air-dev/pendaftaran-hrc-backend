@@ -42,6 +42,10 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true, // created_at, updated_at
     timestamps: true,
     paranoid: true, // deleted_at
+
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at'
   });
   return User;
 };

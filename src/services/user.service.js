@@ -41,6 +41,35 @@ class UserService {
     return await userRepository.create(finalUserData);
   }
 
+  async createUserByAdmin(userData) {
+    const { full_name, username, email, password, role, status } = userData;
+
+    // Cek duplikasi data
+    const existingEmail = await userRepository.findByEmail(email);
+    if (existingEmail) throw new Error('Email is already registered');
+
+    const existingUsername = await userRepository.findByUsername(username);
+    if (existingUsername) throw new Error('Username is already taken');
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Simpan data pilihan admin ke database
+    const newUser = await userRepository.create({
+      full_name,
+      username,
+      email,
+      password: hashedPassword,
+      role,
+      status
+    });
+
+    const userJson = newUser.toJSON();
+    delete userJson.password;
+
+    return userJson;
+  }
+
   /**
    * Logika untuk Login User
    */
@@ -133,15 +162,18 @@ class UserService {
    * Mengambil profile user (untuk kebutuhan dashboard)
    */
   async getUserById(id) {
+    // Memanggil repository bawaan Anda: findById(id)
     const user = await userRepository.findById(id);
-    if (!user) {
-      throw new Error('User not found.');
-    }
     
-    // Jangan kirim password kembali ke client/frontend
+    // Jika user tidak ditemukan di database, lemparkan error
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    // Konversi ke objek biasa untuk menghapus password demi keamanan
     const userJson = user.toJSON();
     delete userJson.password;
-    
+
     return userJson;
   }
 

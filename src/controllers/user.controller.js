@@ -69,6 +69,36 @@ class UserController {
     }
   }
 
+  async createByAdmin(req, res) {
+    try {
+      // Ambil seluruh data termasuk status yang dikirim dari panel admin
+      const { full_name, username, email, password, role, status } = req.body;
+
+      const newUser = await userService.createUserByAdmin({
+        full_name,
+        username,
+        email,
+        password,
+        role,
+        status
+      });
+
+      return res.status(201).json({
+        status: 'success',
+        message: 'User created successfully by Administrator.',
+        data: {
+          user: newUser
+        }
+      });
+    } catch (error) {
+      console.error("ADMIN CREATE USER ERROR:", error);
+      return res.status(400).json({
+        status: 'fail',
+        message: error.message
+      });
+    }
+  }
+
   /**
    * Mendapatkan daftar user dengan pagination & search
    * GET /api/users
@@ -98,24 +128,28 @@ class UserController {
    * Mengambil data profil user (Berdasarkan ID)
    * GET /api/users/:id
    */
-  async getProfile(req, res) {
-    try {
-      const { id } = req.params;
-      const user = await userService.getUserById(id);
+    async getProfile(req, res) {
+      try {
+        const { id } = req.params;
+        
+        // Memanggil fungsi service yang baru kita pastikan di atas
+        const user = await userService.getUserById(id);
 
-      return res.status(200).json({
-        status: 'success',
-        data: {
-          user
-        }
-      });
-    } catch (error) {
-      return res.status(404).json({
-        status: 'fail',
-        message: error.message
-      });
+        return res.status(200).json({
+          status: 'success',
+          message: 'User data retrieved successfully',
+          data: {
+            user // Data ini yang dibaca oleh `response.data.data.user` di React Form Anda
+          }
+        });
+      } catch (error) {
+        console.error("GET USER BY ID ERROR:", error);
+        return res.status(404).json({
+          status: 'fail',
+          message: error.message
+        });
+      }
     }
-  }
 
   /**
    * Update data profil user
@@ -124,23 +158,29 @@ class UserController {
   async update(req, res) {
     try {
       const { id } = req.params;
-      // Kita hanya mengambil field yang diizinkan untuk diupdate secara umum
-      const { full_name, username, email } = req.body;
+      
+      // Ambil field dasar beserta password opsional dari body request
+      const { full_name, username, email, role, status, password } = req.body;
 
+      // Kirim objek data ke service
       const updatedUser = await userService.updateUser(id, {
         full_name,
         username,
-        email
+        email,
+        role,
+        status,
+        password // Teruskan password (jika ada)
       });
 
       return res.status(200).json({
         status: 'success',
-        message: 'Profile updated successfully',
+        message: 'User profile updated successfully',
         data: {
           user: updatedUser
         }
       });
     } catch (error) {
+      console.error("UPDATE USER ERROR:", error);
       return res.status(400).json({
         status: 'fail',
         message: error.message
