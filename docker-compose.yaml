@@ -9,9 +9,9 @@ services:
       - PORT=5000 
       - DB_HOST=database
       - DB_PORT=3311 
-      - DB_USER=hrc_user
+      - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD} # 🔑 Mengambil dari .env
-      - DB_NAME=pendaftaran_hrc
+      - DB_NAME=${DB_NAME}
       - FRONTEND_URL=https://pendaftaran-hrc-frontendd.vercel.app
       - MIDTRANS_SERVER_KEY=${MIDTRANS_SERVER_KEY} # 🔑 Mengambil dari .env
       - MIDTRANS_CLIENT_KEY=${MIDTRANS_CLIENT_KEY} # 🔑 Mengambil dari .env
@@ -26,8 +26,8 @@ services:
       - "3311:3306" # Port luar 3311 aman digunakan untuk remote (DBeaver/Navicat)
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} # 🔑 Mengambil dari .env
-      - MYSQL_DATABASE=pendaftaran_hrc
-      - MYSQL_USER=hrc_user
+      - MYSQL_DATABASE=${DB_NAME}
+      - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_PASSWORD} # 🔑 Mengambil dari .env
     volumes:
       - mysql_data:/var/lib/mysql
