@@ -8,7 +8,7 @@ services:
       - "5011:5000"
     environment:
       - NODE_ENV=production
-      - PORT= 
+      - PORT=5000 
       - DB_HOST=database
       - DB_PORT=3311 # 🚨 Tetap 3306 karena komunikasi internal antar-container
       - DB_USER=hrc_user
