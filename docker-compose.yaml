@@ -10,13 +10,13 @@ services:
       - NODE_ENV=production
       - PORT=5000 
       - DB_HOST=database
-      - DB_PORT=3311 # 🚨 Tetap 3306 karena komunikasi internal antar-container
+      - DB_PORT=3311 
       - DB_USER=hrc_user
-      - DB_PASSWORD=hrc_secret_password
+      - DB_PASSWORD=${DB_PASSWORD} # 🔑 Mengambil dari .env
       - DB_NAME=pendaftaran_hrc
       - FRONTEND_URL=https://pendaftaran-hrc-frontendd.vercel.app
-      - MIDTRANS_SERVER_KEY=Mid-server-KODE
-      - MIDTRANS_CLIENT_KEY=Mid-client-KODE 
+      - MIDTRANS_SERVER_KEY=${MIDTRANS_SERVER_KEY} # 🔑 Mengambil dari .env
+      - MIDTRANS_CLIENT_KEY=${MIDTRANS_CLIENT_KEY} # 🔑 Mengambil dari .env
     depends_on:
       database:
         condition: service_healthy
@@ -25,16 +25,16 @@ services:
     image: mysql:8.0
     container_name: hrc-database
     ports:
-      - "3311:3306" # Port 3307 jika kamu ingin remote database dari aplikasi luar (seperti DBeaver/Navicat)
+      - "3311:3306" # Port luar 3311 aman digunakan untuk remote (DBeaver/Navicat)
     environment:
-      - MYSQL_ROOT_PASSWORD=super_secret_root_password
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} # 🔑 Mengambil dari .env
       - MYSQL_DATABASE=pendaftaran_hrc
       - MYSQL_USER=hrc_user
-      - MYSQL_PASSWORD=hrc_secret_password
+      - MYSQL_PASSWORD=${DB_PASSWORD} # 🔑 Mengambil dari .env
     volumes:
       - mysql_data:/var/lib/mysql
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "hrc_user", "-phrc_secret_password"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "hrc_user", "-p${DB_PASSWORD}"]
       interval: 5s
       timeout: 5s
       retries: 5
