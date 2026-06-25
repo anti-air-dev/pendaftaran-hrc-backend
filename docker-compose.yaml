@@ -14,7 +14,7 @@ services:
       - DB_USER=hrc_user
       - DB_PASSWORD=hrc_secret_password
       - DB_NAME=pendaftaran_hrc
-      - FRONTEND_URL=https://pendaftaran-hrc-frontendd.vercel.app/
+      - FRONTEND_URL=https://pendaftaran-hrc-frontendd.vercel.app
       - MIDTRANS_SERVER_KEY=Mid-server-KODE
       - MIDTRANS_CLIENT_KEY=Mid-client-KODE 
     depends_on:

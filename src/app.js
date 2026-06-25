@@ -37,8 +37,6 @@ app.use(cors({
   credentials: true // Tambahkan ini jika nanti kamu menggunakan Cookies/Sessions
 }));
 
-// Tambahkan pengaman tambahan khusus preflight OPTIONS jika diperlukan
-app.options('*', cors());
 
 // 3. Serve Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
