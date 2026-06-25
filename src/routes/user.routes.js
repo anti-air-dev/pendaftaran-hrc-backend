@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/user.controller');
 const authMiddleware = require('../middlewares/auth.middleware');
-const { registerValidator, loginValidator, updateValidator } = require('../validators/user.validator');
+const { registerValidator, loginValidator, updateValidator, adminCreateValidator } = require('../validators/user.validator');
 const { isAdmin } = require('../middlewares/role.middleware');
 
 // --- Public Routes ---
@@ -11,6 +11,8 @@ router.post('/register', registerValidator, userController.register);
 router.post('/login', loginValidator, userController.login);
 
 router.get('/', authMiddleware, isAdmin, userController.getAll);
+router.post('/', authMiddleware, isAdmin, adminCreateValidator, userController.createByAdmin);
+router.get('/:id', authMiddleware, userController.getProfile);
 router.put('/:id', authMiddleware, updateValidator, userController.update);
 router.put('/:id/change-password', authMiddleware, userController.changePassword);
 router.delete('/:id', authMiddleware, isAdmin, userController.delete);

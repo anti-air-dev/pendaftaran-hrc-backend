@@ -44,7 +44,9 @@ module.exports = (sequelize, DataTypes) => {
     tableName: 'competitions',
     underscored: true, // Otomatis menggunakan snake_case untuk created_at, updated_at
     paranoid: true,    // Mengaktifkan fitur Soft Deletes (deleted_at)
-    deletedAt: 'deleted_at'
+    deletedAt: 'deleted_at',
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
   });
   return Competition;
 };

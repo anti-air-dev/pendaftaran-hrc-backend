@@ -4,7 +4,10 @@ const { Model } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      // Definisi relasi di sini nanti
+      User.hasMany(models.Team, {
+        foreignKey: 'user_id', // Nama kolom foreign key yang ada di tabel teams
+        as: 'teams'            // Nama alias untuk memanggil data teams dari user (misal: user.teams)
+      });
     }
   };
   User.init({
@@ -42,6 +45,10 @@ module.exports = (sequelize, DataTypes) => {
     underscored: true, // created_at, updated_at
     timestamps: true,
     paranoid: true, // deleted_at
+
+    createdAt: 'created_at',
+    updatedAt: 'updated_at',
+    deletedAt: 'deleted_at'
   });
   return User;
 };

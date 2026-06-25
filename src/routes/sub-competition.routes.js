@@ -18,6 +18,7 @@ const {
 // ==========================================
 router.get('/', subCompetitionController.getAll);
 router.get('/:id', subCompetitionController.getById);
+router.get('/detail/:slug', subCompetitionController.getBySlug);
 
 // ==========================================
 // PROTECTED ROUTES

@@ -42,6 +42,24 @@ class SubCompetitionController {
     }
   }
 
+  async getBySlug(req, res) {
+    try {
+      const { slug } = req.params;
+      const data = await subCompetitionService.getSubCompetitionBySlug(slug);
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Sub-kompetisi berhasil ditemukan',
+        data
+      });
+    } catch (error) {
+      return res.status(error.statusCode || 500).json({
+        status: 'error',
+        message: error.message || 'Terjadi kesalahan pada server'
+      });
+    }
+  }
+
 /**
    * Membuat sub-kompetisi baru
    */

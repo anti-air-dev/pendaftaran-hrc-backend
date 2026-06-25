@@ -4,6 +4,7 @@ const router = express.Router();
 const registrationController = require('../controllers/registration.controller');
 const { validateRegistration } = require('../validators/registration.validator');
 const handleRegistrationUpload = require('../middlewares/upload-registration.middleware');
+const authMiddleware = require('../middlewares/auth.middleware');
 
 // Middleware pembantu untuk menyatukan text field multipart ke req.body pencocokan validator
 const parseRegistrationPayload = (req, res, next) => {
@@ -18,10 +19,14 @@ const parseRegistrationPayload = (req, res, next) => {
 };
 
 // POST - Menggunakan urutan: Upload -> Parse JSON -> Validasi Schema -> Controller
-router.post('/', handleRegistrationUpload, parseRegistrationPayload, validateRegistration, registrationController.register);
+router.post('/', authMiddleware, handleRegistrationUpload, parseRegistrationPayload, validateRegistration, registrationController.register);
 
 // GET All
 router.get('/', registrationController.getAll);
+
+router.get('/my-registrations', authMiddleware, registrationController.getMyRegistrations);
+router.get('/my-registrations/:id', authMiddleware, registrationController.getMyRegistrationDetail);
+
 
 // GET by ID
 router.get('/:id', registrationController.getById);
