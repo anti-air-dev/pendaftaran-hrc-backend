@@ -41,6 +41,21 @@ class SubCompetitionService {
     return subCompetition;
   }
 
+  async getSubCompetitionBySlug(slug) {
+    if (!slug) {
+      throw new Error('Slug parameter is required');
+    }
+
+    const subCompetition = await subCompetitionRepository.findBySlug(slug);
+    if (!subCompetition) {
+      const error = new Error('Sub-kompetisi tidak ditemukan');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    return subCompetition;
+  }
+
   /**
    * Logika membuat sub-kompetisi baru beserta auto slug
    */

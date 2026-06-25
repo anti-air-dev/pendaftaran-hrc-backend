@@ -1,6 +1,7 @@
 const registrationRepository = require('../repositories/registration.repository');
 const teamRepository = require('../repositories/team.repository');
-const { sequelize, Team, TeamMember, SubCompetition, Payment } = require('../models');
+const { sequelize, Team, Registration, TeamMember, SubCompetition, Payment } = require('../models');
+const { where } = require('sequelize');
 
 class RegistrationService {
   async getAllRegistrations(filters) {
@@ -13,8 +14,43 @@ class RegistrationService {
     return registration;
   }
 
+  async getUserRegistrations(userId) {
+    if (!userId) {
+      throw new Error('User ID tidak valid atau tidak terautentikasi.');
+    }
+    return await registrationRepository.findByUserId(userId);
+  }
+
+  async getMyRegistrationById(id, userId) {
+    // Cari registrasi spesifik milik user yang sedang login
+    const registration = await Registration.findOne({
+      where: { 
+        id: id,
+      },
+      include: [
+        {
+          model: SubCompetition,
+          as: 'subCompetition',
+          attributes: ['id', 'name', 'category', 'registration_fee']
+        },
+        {
+          model: Team,
+          where: {user_id: userId},
+          as: 'team',
+          attributes: ['id', 'teamName', 'institution']
+        }
+      ]
+    });
+
+    if (!registration) {
+      throw new Error('Data registrasi tidak ditemukan atau Anda tidak memiliki akses');
+    }
+
+    return registration;
+  }
+
   async registerNewTeamAndMembers(payload, files) {
-    const { subCompetitionId, team, leader, members } = payload;
+    const { userId,subCompetitionId, team, leader, members } = payload;
     const transaction = await sequelize.transaction();
 
     try {
@@ -26,6 +62,7 @@ class RegistrationService {
 
       // 1. Buat Tim
       const newTeam = await Team.create({
+        userId: userId,
         teamName: team.teamName,
         institution: team.institution
       }, { transaction });
@@ -67,17 +104,17 @@ class RegistrationService {
       }, { transaction });
 
       // 5. Record Pembayaran
-      const invoiceNumber = `INV-${Date.now()}-${newTeam.id}`; 
-      await Payment.create({
-        registrationId: newRegistration.id,
-        transactionId: invoiceNumber,
-        amount: subComp.registration_fee || 0, 
-        paymentStatus: 'pending',
-        paymentMethod: 'unselected'
-      }, { transaction });
+      // const invoiceNumber = `INV-${Date.now()}-${newTeam.id}`; 
+      // await Payment.create({
+      //   registrationId: newRegistration.id,
+      //   transactionId: invoiceNumber,
+      //   amount: subComp.registration_fee || 0, 
+      //   paymentStatus: 'pending',
+      //   paymentMethod: 'unselected'
+      // }, { transaction });
 
       await transaction.commit();
-      return { ...newRegistration.toJSON(), invoiceNumber };
+      return { ...newRegistration.toJSON() };
 
     } catch (error) {
       await transaction.rollback();

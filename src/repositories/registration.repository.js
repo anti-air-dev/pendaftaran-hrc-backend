@@ -1,3 +1,4 @@
+const { where } = require('sequelize');
 const { Registration, Team, SubCompetition, Payment } = require('../models');
 
 class RegistrationRepository {
@@ -20,6 +21,28 @@ class RegistrationRepository {
         { model: SubCompetition, as: 'subCompetition' },
         { model: Payment, as: 'payment' }
       ]
+    });
+  }
+
+  async findByUserId(userId) {
+    return await Registration.findAll({
+      where: { deleted_at: null },
+      include: [
+        {
+          model: SubCompetition,
+          as: 'subCompetition',
+          attributes: ['id', 'name', 'category', 'registration_fee']
+        },
+        {
+          model: Team,
+          as: 'team',
+          where: {
+            user_id: userId
+          },
+          attributes: ['id', 'teamName', 'institution']
+        }
+      ],
+      order: [['created_at', 'DESC']]
     });
   }
 

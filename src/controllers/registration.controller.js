@@ -8,6 +8,8 @@ class RegistrationController {
       // 🚨 MENGAMBIL DATA YANG BERSIH & TERVALIDASI SAJA
       // includeOptionals: true memastikan field optional (seperti members) tetap ikut jika ada
       const validatedPayload = matchedData(req, { includeOptionals: true });
+      
+      validatedPayload.userId = req.user.id; 
 
       // Kirim validatedPayload ke service, JANGAN req.body
       const result = await registrationService.registerNewTeamAndMembers(validatedPayload, req.files);
@@ -38,6 +40,45 @@ class RegistrationController {
       return res.status(200).json({ success: true, data });
     } catch (error) {
       return res.status(404).json({ success: false, message: error.message });
+    }
+  }
+
+  async getMyRegistrations(req, res) {
+    try {
+      // req.user.id didapatkan dari middleware token autentikasi Anda
+      const userId = req.user.id; 
+      const registrations = await registrationService.getUserRegistrations(userId);
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Data registrasi user berhasil dimuat',
+        data: registrations
+      });
+    } catch (error) {
+      return res.status(500).json({
+        status: 'error',
+        message: error.message || 'Gagal memuat data registrasi'
+      });
+    }
+  }
+
+  async getMyRegistrationDetail(req, res) {
+    try {
+      const { id } = req.params;
+      const userId = req.user.id; // Dari middleware otentikasi
+
+      const data = await registrationService.getMyRegistrationById(id, userId);
+
+      return res.status(200).json({
+        status: 'success',
+        message: 'Detail registrasi berhasil dimuat',
+        data: data
+      });
+    } catch (error) {
+       return res.status(404).json({
+        status: 'error',
+        message: error.message
+      });
     }
   }
 

@@ -27,6 +27,11 @@ module.exports = (sequelize) => {
         foreignKey: 'teamId', // <-- UBAH JUGA DI SINI
         as: 'registrations'
       });
+
+      Team.belongsTo(models.User, {
+        foreignKey: 'user_id', // Kolom di tabel teams yang menyimpan ID user
+        as: 'creator'          // Alias (bisa 'user' atau 'creator' agar lebih spesifik sebagai pembuat tim)
+      });
     }
   }
 
@@ -36,6 +41,11 @@ module.exports = (sequelize) => {
         type: DataTypes.BIGINT,
         primaryKey: true,
         autoIncrement: true
+      },
+      userId: {
+        type: DataTypes.BIGINT,
+        allowNull: true,
+        field: 'user_id' // Mapping dari camelCase ke snake_case database
       },
       leaderId: {
         type: DataTypes.BIGINT,
