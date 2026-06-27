@@ -5,6 +5,8 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const YAML = require('yamljs');
 const path = require('path');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 const app = express();
 
 
@@ -12,7 +14,24 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const SECRET = process.env.JWT_SECRET;
 
+
+// 1. IMPLEMENTASI HELMET.JS (Security Headers)
+app.use(helmet());
 app.use(express.json());
+
+// 2. IMPLEMENTASI EXPRESS-RATE-LIMIT (API Rate Limiting)
+// Membatasi setiap IP maksimal 100 request per 15 menit
+const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, 
+    max: 100, 
+    message: {
+        status: "error",
+        message: "Terlalu banyak request dari IP ini, silakan coba lagi setelah 15 menit."
+    }
+});
+
+// Terapkan limiter hanya pada endpoint API
+app.use('/', apiLimiter);
 
 // 1. Load base swagger definition
 const swaggerBase = YAML.load(path.join(__dirname, '..','docs', 'swagger.yaml'));
